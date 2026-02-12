@@ -1,0 +1,17 @@
+.DS_Store
+**/example_src_code/
+
+# Kiro IDE files - all excluded (specs are symlinked to docs/)
+.kiro/*
+rebuild*.sh
+iopulse_source.tar.gz
+__pycache__
+results/*
+runtest.sh
+old_rebuild.sh
+docs/working_docs/*
+gitpush.sh
+target/*
+# Docker test data
+test-data/*
+iopulse-src.tar.gz

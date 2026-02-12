@@ -1,0 +1,101 @@
+# Multi-Phase IOPulse Configuration Example
+
+# Global target configuration
+[[targets]]
+path = "/tmp/iopulse_test"
+target_type = "file"
+file_size = 10737418240  # 10GB
+preallocate = true
+
+# Worker configuration
+[workers]
+threads = 8
+
+# Output configuration
+[output]
+json_output = "results.json"
+csv_output = "results.csv"
+show_latency = true
+show_percentiles = true
+
+# Runtime configuration
+[runtime]
+continue_on_error = false
+
+# Phase 1: Warmup with sequential writes
+[[phases]]
+name = "warmup"
+stonewall = true
+
+[phases.workload]
+read_percent = 0
+write_percent = 100
+queue_depth = 32
+engine = "sync"
+
+[phases.workload.completion_mode]
+mode = "duration"
+seconds = 30
+
+[[phases.workload.write_distribution]]
+weight = 100
+access = "sequential"
+block_size = 131072
+
+# Phase 2: Random read test
+[[phases]]
+name = "random_read"
+stonewall = true
+
+[phases.workload]
+read_percent = 100
+write_percent = 0
+queue_depth = 64
+engine = "sync"
+
+[phases.workload.completion_mode]
+mode = "duration"
+seconds = 300
+
+[phases.workload.distribution]
+type = "zipf"
+theta = 1.5
+
+[[phases.workload.read_distribution]]
+weight = 100
+access = "random"
+block_size = 4096
+
+# Phase 3: Mixed workload
+[[phases]]
+name = "mixed"
+stonewall = true
+
+[phases.workload]
+read_percent = 70
+write_percent = 30
+queue_depth = 128
+engine = "sync"
+
+[phases.workload.completion_mode]
+mode = "duration"
+seconds = 600
+
+[phases.workload.distribution]
+type = "pareto"
+h = 0.9
+
+[[phases.workload.read_distribution]]
+weight = 80
+access = "random"
+block_size = 4096
+
+[[phases.workload.read_distribution]]
+weight = 20
+access = "sequential"
+block_size = 65536
+
+[[phases.workload.write_distribution]]
+weight = 100
+access = "random"
+block_size = 4096

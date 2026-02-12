@@ -1,0 +1,57 @@
+# IOPulse - Git Export Control
+# Files/directories marked with export-ignore will NOT be included in public releases
+
+# ===== PRIVATE DEVELOPMENT FILES =====
+
+# Test and regression directories (keep private)
+/tests/ export-ignore
+/test-data/ export-ignore
+
+# Migration and internal scripts (keep private)
+/scripts/migrate-repository.sh export-ignore
+/scripts/resume-migration.sh export-ignore
+/scripts/cleanup-remote-branches.sh export-ignore
+/scripts/reset-public-history.sh export-ignore
+/scripts/sync-prod-to-public.sh export-ignore
+/scripts/verify-public-export.sh export-ignore
+
+# Planning and internal documentation (keep private)
+/plans/ export-ignore
+/MIGRATION_QUICKSTART.md export-ignore
+/FINAL_STEPS.md export-ignore
+/PHASE_2_FILTERING_GUIDE.md export-ignore
+
+# GitHub Actions workflows (internal automation, keep private)
+/.github/ export-ignore
+
+# Internal development files
+/gitpush.sh export-ignore
+/.kiro/ export-ignore
+
+# Compressed source archives (not needed in git)
+/*.tar.gz export-ignore
+/iopulse-src.tar.gz export-ignore
+
+# Development and benchmark scripts (keep private)
+/docker-run-benchmark.sh export-ignore
+
+# ===== PUBLIC FILES (DO NOT ADD THESE) =====
+# These WILL be included in public releases:
+# - /src/ (all source code)
+# - /docs/ (user documentation - except internal docs below)
+# - /examples/ (example configs)
+# - README.md, LICENSE, Cargo.toml, Cargo.lock
+# - Dockerfile, docker-compose.yml, docker-run.sh
+# - .gitignore, .dockerignore
+
+# Specific docs to keep private
+/docs/tasks.md export-ignore
+/docs/GITHUB_PERMISSIONS_GUIDE.md export-ignore
+/docs/GIT_WORKFLOW.md export-ignore
+
+# ===== EXCEPTIONS =====
+# Use ! to include files that would otherwise be ignored
+# Example: !/tests/README.md (would keep this specific file)
+
+# Note: To test what will be exported, run:
+#   git archive --format=tar HEAD | tar -t
