@@ -1,0 +1,25 @@
+# Minimal runtime image for pre-built binary
+# Use this if you've already built the binary on a Linux machine
+# 
+# Usage:
+#   1. Build on Linux: cargo build --release
+#   2. Build image: docker build -f Dockerfile.prebuilt -t iopulse:latest .
+#   3. Run: docker run --rm -v $(pwd)/test-data:/data iopulse:latest [args]
+
+FROM debian:bookworm-slim
+
+# Install minimal runtime dependencies
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy pre-built binary from Linux build
+COPY target/release/iopulse /usr/local/bin/iopulse
+
+# Create data directory
+RUN mkdir -p /data
+
+WORKDIR /data
+
+ENTRYPOINT ["/usr/local/bin/iopulse"]
+CMD ["--help"]

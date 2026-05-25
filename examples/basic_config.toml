@@ -1,0 +1,65 @@
+# Basic IOPulse Configuration Example
+
+[workload]
+read_percent = 70
+write_percent = 30
+queue_depth = 32
+engine = "sync"
+direct = false
+sync = false
+
+# Completion mode: run for 60 seconds
+[workload.completion_mode]
+mode = "duration"
+seconds = 60
+
+# Use Zipf distribution for hot/cold data access
+[workload.distribution]
+type = "zipf"
+theta = 1.2
+
+# Define composite read workload
+[[workload.read_distribution]]
+weight = 70
+access = "random"
+block_size = 4096
+
+[[workload.read_distribution]]
+weight = 30
+access = "sequential"
+block_size = 131072
+
+# Define composite write workload
+[[workload.write_distribution]]
+weight = 100
+access = "random"
+block_size = 4096
+
+# Target configuration
+[[targets]]
+path = "/tmp/iopulse_test"
+target_type = "file"
+file_size = 1073741824  # 1GB
+preallocate = true
+
+[targets.fadvise_flags]
+sequential = false
+random = true
+willneed = false
+
+# Worker configuration
+[workers]
+threads = 4
+cpu_cores = "0,1,2,3"
+
+# Output configuration
+[output]
+show_latency = true
+show_percentiles = true
+live_interval = 1
+
+# Runtime configuration
+[runtime]
+continue_on_error = false
+verify = false
+dry_run = false

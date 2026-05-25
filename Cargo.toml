@@ -1,0 +1,58 @@
+[package]
+name = "iopulse"
+version = "0.1.0"
+edition = "2021"
+authors = ["IOPulse Contributors"]
+license = "MIT"
+description = "High-performance IO profiling tool written in Rust"
+repository = "https://github.com/adrabkin/IOPulse"
+readme = "README.md"
+keywords = ["io", "benchmark", "profiling", "storage", "performance"]
+categories = ["command-line-utilities", "development-tools::profiling"]
+
+[dependencies]
+# CLI and configuration
+clap = { version = "4", features = ["derive", "env"] }
+toml = "0.8"
+
+# IO engines
+io-uring = { version = "0.6", optional = true }
+libc = "0.2"
+
+# Statistics
+hdrhistogram = "7"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rmp-serde = "1"  # MessagePack for distributed protocol (supports all serde features)
+bincode = "1"  # Binary serialization for histograms in distributed mode
+
+# Networking
+tokio = { version = "1", features = ["full"] }
+
+# Random number generation
+rand = "0.8"
+rand_distr = "0.4"
+rand_xoshiro = "0.6"  # Fast, non-crypto RNG (like elbencho uses)
+
+# Utilities
+anyhow = "1"
+thiserror = "1"
+crossbeam = "0.8"
+num_cpus = "1"
+chrono = "0.4"  # For timestamps in layout manifests
+rayon = "1.8"  # Parallel iterators for file validation
+hostname = "0.3"  # For node identification in distributed mode
+
+[dev-dependencies]
+tempfile = "3"
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+
+[features]
+default = ["io_uring"]
+io_uring = ["dep:io-uring"]
