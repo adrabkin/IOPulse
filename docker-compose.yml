@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  iopulse:
+    build: .
+    image: iopulse:latest
+    # Mount current directory for test files
+    volumes:
+      - ./test-data:/data
+    # Required for accurate performance testing
+    privileged: false
+    # Allocate resources
+    cpus: '4'
+    mem_limit: 4g
+    # Pass through all command line arguments
+    command: ${IOPULSE_ARGS:---help}
+
+  # Example: privileged mode for O_DIRECT and block device access
+  iopulse-privileged:
+    build: .
+    image: iopulse:latest
+    volumes:
+      - ./test-data:/data
+    privileged: true
+    cpus: '4'
+    mem_limit: 4g
+    command: ${IOPULSE_ARGS:---help}

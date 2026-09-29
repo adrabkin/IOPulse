@@ -1,0 +1,26 @@
+# Build artifacts
+target/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# Documentation (not needed for build)
+docs/
+
+# Test files
+tests/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Misc
+*.log
